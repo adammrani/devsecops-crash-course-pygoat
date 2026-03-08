@@ -1,0 +1,34 @@
+name: CI
+
+# If you want to activate it on certain branches :
+#on:
+#  push:
+#    branches:
+#      - main
+#      - feature/xx"
+
+# If you want to activate is on every branch when there is a "push":
+on: [push] #on: [push,....]
+
+jobs:
+  sast_scan: 
+#Bandit : tool for python application to run SASTs, you could use whatever tools you want
+#Criteria : Adoption (is largely used), Complexity (should be easy to integrate)
+    name: Run Bandit Scan
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+    #jobs execute on fresh new environment in GitHub
+      uses: actions/checkout@v2 #checks out repository code
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install Bandit
+      run: pip install bandit
+
+    - name: Run Bandit Scan
+      run: bandit -r .
